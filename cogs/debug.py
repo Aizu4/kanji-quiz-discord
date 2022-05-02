@@ -12,7 +12,7 @@ class Debug (commands.Cog):
         """
         Prints the bot's latency (in milliseconds)
         """
-        await ctx.send(f"{round(self.bot.latency * 1000)} ms")
+        await ctx.send(f"{self.bot.latency * 1000 :.0f} ms")
 
     @commands.command(name='report')
     async def report(self, _, *msg: str):
