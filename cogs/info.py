@@ -37,6 +37,11 @@ class Info (commands.Cog):
         Displays info for a random kanji from the provided set
         """
         choice_set = str_to_set(arg, Kanji.get_set)
+
+        if not choice_set:
+            await ctx.send('Invalid set definition (empty set)')
+            return
+
         random_kanji = choice(list(choice_set))
         await self.show_info(ctx, random_kanji)
 
