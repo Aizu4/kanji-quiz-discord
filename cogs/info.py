@@ -1,6 +1,9 @@
+from random import choice
+
 from discord import Embed, Colour, File
 from discord.ext import commands
 from data.kanji_data import Kanji
+from util.infix_parser import str_to_set
 
 
 class Info (commands.Cog):
@@ -27,4 +30,13 @@ class Info (commands.Cog):
             .add_field(name="Meanings", value=kanji.meanings_str(), inline=False)
 
         await ctx.send(file=file, embed=embed)
+
+    @commands.command(name='random')
+    async def random_kanji_info(self, ctx: commands.Context, arg: str = 'all'):
+        """
+        Displays info for a random kanji from the provided set
+        """
+        choice_set = str_to_set(arg, Kanji.get_set)
+        random_kanji = choice(list(choice_set))
+        await self.show_info(ctx, random_kanji)
 
