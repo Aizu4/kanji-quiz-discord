@@ -59,6 +59,8 @@ class Kanji:
 whole_data = dict((k, Kanji(*v)) for k, v in raw_data.items())
 
 kanji_sets: dict[str, set[str]] = {
+    'all': set(k for k in whole_data.keys()),
+
     'n5': set(k for k, d in whole_data.items() if d.jlpt == 5),
     'n4': set(k for k, d in whole_data.items() if d.jlpt == 4),
     'n3': set(k for k, d in whole_data.items() if d.jlpt == 3),
