@@ -19,19 +19,15 @@ intents.message_content = True
 bot = commands.Bot(command_prefix="k?", owner_id=int(os.getenv('OWNER')), intents=intents)
 
 
-async def setup(bot):
-    await bot.add_cog(Debug(bot))
-    await bot.add_cog(Info(bot))
-    await bot.add_cog(Quiz(bot))
-
-
 @bot.event
 async def on_ready():
     print('ready')
 
 
 async def main():
-    await setup(bot)
+    await bot.add_cog(Debug(bot))
+    await bot.add_cog(Info(bot))
+    await bot.add_cog(Quiz(bot))
     await bot.start(os.getenv('TOKEN'))
 
 
