@@ -1,20 +1,28 @@
+import asyncio
+
+import discord
 from discord.ext import commands
 
 import os
 from dotenv import load_dotenv
 
-# Import cogs
 from cogs.debug import Debug
 from cogs.quiz import Quiz
 from cogs.info import Info
 
 load_dotenv()
 
-bot = commands.Bot(command_prefix="k?", owner_id=int(os.getenv('OWNER')))
+intents = discord.Intents.default()
+intents.members = True
+intents.message_content = True
 
-bot.add_cog(Quiz(bot))
-bot.add_cog(Debug(bot))
-bot.add_cog(Info(bot))
+bot = commands.Bot(command_prefix="k?", owner_id=int(os.getenv('OWNER')), intents=intents)
+
+
+async def setup(bot):
+    await bot.add_cog(Debug(bot))
+    await bot.add_cog(Info(bot))
+    await bot.add_cog(Quiz(bot))
 
 
 @bot.event
@@ -22,6 +30,10 @@ async def on_ready():
     print('ready')
 
 
+async def main():
+    await setup(bot)
+    await bot.start(os.getenv('TOKEN'))
+
+
 if __name__ == '__main__':
-    token = os.getenv('TOKEN')
-    bot.run(token)
+    asyncio.run(main())

@@ -44,4 +44,3 @@ class Info (commands.Cog):
 
         random_kanji = choice(list(choice_set))
         await self.show_info(ctx, random_kanji)
-
