@@ -15,9 +15,8 @@ class Info (commands.Cog):
         """
         Displays info for given kanji character
         """
-        try:
-            kanji = Kanji.from_local(arg)
-        except KeyError:
+        kanji = Kanji.from_local(arg)
+        if not kanji:
             await ctx.send('Invalid kanji')
             return
 

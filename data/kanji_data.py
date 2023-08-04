@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pprint import pprint
+
 from data.raw_data import raw_data
 
 whole_data: dict[str, Kanji]
@@ -46,7 +48,7 @@ class Kanji:
 
     @classmethod
     def from_local(cls, literal: str) -> Kanji:
-        return whole_data[literal]
+        return whole_data.get(literal)
 
     @staticmethod
     def get_set(set_name: str) -> set[str]:
@@ -92,3 +94,26 @@ kanji_sets: dict[str, set[str]] = {
 
 for f in range(500, 2501, 500):
     kanji_sets[f"f{f}"] = set(k for k, d in whole_data.items() if (d.freq is not None and d.freq <= 500))
+
+
+if __name__ == '__main__':
+    with open("kanken.txt", 'r', encoding='utf-8') as kanken_file:
+        kanken = set(k for k in kanken_file.read())
+
+    with open("out.json", "w", encoding="utf-8") as json_file:
+        to_write = ""
+        to_write += "[\n"
+        for k in whole_data.values():
+            if k.literal not in kanken:
+                continue
+            to_write += "\t{"
+            for attr in ['literal', 'grade', 'jlpt', 'freq', 'strokes', 'on_yomi', 'kun_yomi', 'meanings']:
+                if value := k.__getattribute__(attr):
+                    to_write += f"{attr!r}:{value!r},"
+            to_write += "},\n"
+        to_write += "]"
+        to_write = to_write.replace(",}", "}"). replace(",]", "]") \
+            .replace(",'", ",\"").replace("{'", "{\"").replace("['", "[\"").replace(", '", ", \"").replace(":'", ":\"") \
+            .replace("':", "\":").replace("',", "\",").replace("']", "\"]").replace("'}", "\"}")
+        json_file.write(to_write)
+
